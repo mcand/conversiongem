@@ -10,7 +10,7 @@ describe Money do
   end
 
   it "is not possible to create a money with an invalid amount" do
-    zero_eur = Money.new(0, 'EUR')
-    zero_eur.ex
+    err = -> { Money.new(0, 'EUR') }.must_raise Money::InvalidMoneyError
+    err.message.must_match /Amount must be greater than 0/
   end
 end
