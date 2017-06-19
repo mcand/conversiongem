@@ -8,6 +8,9 @@ class Money
     @amount = amount
     @currency = currency
   end
- 
+
+  def inspect
+    return "#{@amount} #{currency}"
+  end
 end
 

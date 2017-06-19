@@ -13,4 +13,9 @@ describe Money do
     err = -> { Money.new(0, 'EUR') }.must_raise Money::InvalidMoneyError
     err.message.must_match /Amount must be greater than 0/
   end
+
+  it "is possible to inspect an instance to get the amount and currency" do
+    fifty_eur = Money.new(50, 'EUR')
+    fifty_eur.inspect.must_equal "#{fifty_eur.amount} #{fifty_eur.currency}" 
+  end
 end
