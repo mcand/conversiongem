@@ -4,6 +4,8 @@ require 'money'
 
 describe Money do 
   let(:fifty_eur) {Money.new(50, 'EUR')}
+  let(:invalid_eur) {Money.new(-1, 'EUR')}
+  let(:invalid_base) {Money.new(50, 'BR')}
 
   it "is possible to create a money with a valid amount and a valid currency" do
     fifty_eur.amount.must_equal 50
@@ -30,9 +32,10 @@ describe Money do
   end
 
   it "is possible to convert to a different currency" do
-    Money.conversion_rates('EUR', { 'USD' => 1.11, 'Bitcoin' => 0.0047})
+    expected = Money.new(55.5, 'USD')
     fifty_eur.convert_to('USD').amount.must_equal 55.50
     fifty_eur.convert_to('USD').currency.must_equal 'USD'
+
   end
 
   it "should return a Money instance when convert is called" do
@@ -41,6 +44,27 @@ describe Money do
   end
 
   it "is not possible to convert an invalid amount" do
+    Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+    err = -> { invalid_eur.convert_to('USD')}.must_raise Money::InvalidMoneyError
+    err.message.must_match /Amount must be greater than 0/
+  end
+
+  it "is not possible to convert to a currency rate that is not configured" do
+    Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+    err = -> { fifty_eur.convert_to('BR')}.must_raise Money::InvalidMoneyError
+    err.message.must_match /Currency rate not available/
+  end
+
+  it "is not possible to convert to a currency if the currency base is not valid" do
+    Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+    err = -> { invalid_base.convert_to('USD')}.must_raise Money::InvalidMoneyError
+    err.message.must_match /Currency base not available/
+  end
+
+  describe "Money Arithmetics" do
+    it "is equal" do
+      1.must_equal 1
+    end
   end
 
 end

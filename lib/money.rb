@@ -14,13 +14,17 @@ class Money
   end
 
   def inspect
-    return "#{@amount} #{currency}"
+    "#{@amount} #{currency}"
+  end
+
+  def to_s
+    "#{@amount} #{currency}"
   end
 
   def convert_to currency
     # TODO: verificar se ta setado para o currency passado
-    # TODO: verificar se tem o que o cara quer converter
-    puts "#{self.amount}"
+    raise InvalidMoneyError, "Currency rate not available" unless @@rates.include? currency
+    raise InvalidMoneyError, "Currency base not available" unless @@currency == self.currency
     new_amount = self.amount * @@rates[currency]
     return Money.new(new_amount.round(2), currency)
   end
