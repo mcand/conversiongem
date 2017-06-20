@@ -69,7 +69,7 @@ describe Money do
     end
   end
 
-  describe "Arithmetics" do
+  describe "Arithmetic operations" do
     describe "Sum" do
       it "is possible to sum two instances of money" do
         Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
@@ -89,47 +89,54 @@ describe Money do
         sum.must_equal(Money.new(68.02, 'EUR'))
       end
     end
+
+    describe "Subtraction" do
+      it "is possibe to subtract two instances of money" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        minus = fifty_eur - twenty_eur
+        minus.must_equal(Money.new(30.0, 'EUR'))
+      end
+
+      it "is possible to subtract two instances of money with different currencies" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        minus = fifty_eur - twenty_dollars
+        minus.must_equal(Money.new(31.98, 'EUR'))
+      end
+    end
+
+    describe "Division" do
+      it "is possible to divide a money instance by a number" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        result = fifty_eur / 2
+        result.must_equal(Money.new(25, 'EUR'))
+      end
+
+      it "should not be possible to divide a money with anything but a number" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        err = -> { fifty_eur / twenty_eur }.must_raise Money::InvalidMoneyError
+        err.message.must_match(/Divistion not permited/)
+      end
+    end
+
+    describe "Multiplication" do
+      it "should be possible to mukltiplicate a money by a number" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        result = twenty_dollars * 3
+        result.must_equal(Money.new(60, 'USD'))
+      end
+
+      it "should not be possible to multiplicate a money with anything but a number" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        err = -> { fifty_eur * twenty_eur }.must_raise Money::InvalidMoneyError
+        err.message.must_match(/Multiplication not permited/)
+      end
+    end
   end
 
-  describe "Subtraction" do
-    it "is possibe to subtract two instances of money" do
-      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
-      minus = fifty_eur - twenty_eur
-      minus.must_equal(Money.new(30.0, 'EUR'))
-    end
-
-    it "is possible to subtract two instances of money with different currencies" do
-      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
-      minus = fifty_eur - twenty_dollars
-      minus.must_equal(Money.new(31.98, 'EUR'))
-    end
-  end
-
-  describe "Division" do
-    it "is possible to divide a money instance by a number" do
-      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
-      result = fifty_eur / 2
-      result.must_equal(Money.new(25, 'EUR'))
-    end
-
-    it "should not be possible to divide a money with anything but a number" do
-      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
-      err = -> { fifty_eur / twenty_eur }.must_raise Money::InvalidMoneyError
-      err.message.must_match(/Divistion not permited/)
-    end
-  end
-
-  describe "Multiplication" do
-    it "should be possible to mukltiplicate a money by a number" do
-      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
-      result = twenty_dollars * 3
-      result.must_equal(Money.new(60, 'USD'))
-    end
-
-    it "should not be possible to multiplicate a money with anything but a number" do
-      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
-      err = -> { fifty_eur * twenty_eur }.must_raise Money::InvalidMoneyError
-      err.message.must_match(/Multiplication not permited/)
+  describe("Comparison") do
+    it "should be possible to verify if two money instances are equal" do
+      result = twenty_dollars == Money.new(20, 'USD')
+      result.must_equal true
     end
   end
 end
