@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'conversion_dawanda'
 require 'money'
 
-describe Money do 
+describe Money do
   let(:fifty_eur) {Money.new(50, 'EUR')}
   let(:invalid_eur) {Money.new(-1, 'EUR')}
   let(:invalid_base) {Money.new(50, 'BR')}
@@ -18,7 +18,7 @@ describe Money do
   end
 
   it "is possible to inspect an instance to get the amount and currency" do
-    fifty_eur.inspect.must_equal "#{fifty_eur.amount} #{fifty_eur.currency}" 
+    fifty_eur.inspect.must_equal "#{fifty_eur.amount} #{fifty_eur.currency}"
   end
 
   it "is possible to configure currency rates with respect to a base currency" do
@@ -59,9 +59,11 @@ describe Money do
     err.message.must_match(/Currency base not available/)
   end
 
-  describe "Money Arithmetics" do
-    it "is equal" do
-      1.must_equal 1
+  describe "Arithmetics" do
+    it "is possible to sum two instances of money" do
+      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+      sum = fifty_eur + fifty_eur
+      sum.must_equal(Money.new(100, 'EUR'))
     end
   end
 

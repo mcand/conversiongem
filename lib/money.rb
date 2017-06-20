@@ -14,11 +14,19 @@ class Money
   end
 
   def inspect
-    "#{@amount} #{currency}"
+   "#{@amount} #{currency}"
   end
 
   def to_s
     "#{@amount} #{currency}"
+  end
+
+  def ==(money)
+    return true if money.amount == @amount && money.currency == @currency
+  end
+
+  def +(money)
+    Money.new(@amount + money.amount, money.currency)
   end
 
   def convert_to currency
@@ -46,4 +54,3 @@ class Money
     end
 
 end
-
