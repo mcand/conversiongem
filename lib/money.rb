@@ -76,6 +76,13 @@ class Money
     return Money.new(result, @currency)
   end
 
+  def >(number)
+    raise InvalidMoneyError, "Operation not permited" unless number.instance_of?(Money)
+    raise InvalidMoneyError, "Cannot compare different currencies" unless number.currency == @currency
+    @amount > number.amount
+  end
+
+
   private
 
     def is_valid_amount?(amount)

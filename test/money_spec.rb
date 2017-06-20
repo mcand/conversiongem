@@ -133,10 +133,24 @@ describe Money do
     end
   end
 
-  describe("Comparison") do
-    it "should be possible to verify if two money instances are equal" do
-      result = twenty_dollars == Money.new(20, 'USD')
-      result.must_equal true
+  describe "Comparison" do
+    describe "Equality" do
+      it "should be possible to verify if two money instances are equal" do
+        result = twenty_dollars == Money.new(20, 'USD')
+        result.must_equal true
+      end
+    end
+
+    describe "Greater" do
+      it "should be possible to verify if a money is greater than another" do
+        result = twenty_dollars > Money.new(5, 'USD')
+        result.must_equal true
+      end
+
+      it "is not possible to compare different currencies" do
+        err = -> { fifty_eur > twenty_dollars }.must_raise Money::InvalidMoneyError
+        err.message.must_match(/Cannot compare different currencies/)
+      end
     end
   end
 end
