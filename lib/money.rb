@@ -64,6 +64,18 @@ class Money
     true
   end
 
+  def /(number)
+    raise InvalidMoneyError, "Divistion not permited" unless number.instance_of?(Fixnum) || number.instance_of?(Float)
+    division = @amount / number
+    return Money.new(division, @currency)
+  end
+
+  def *(number)
+    raise InvalidMoneyError, "Multiplication not permited" unless number.instance_of?(Fixnum) || number.instance_of?(Float)
+    result = @amount * number
+    return Money.new(result, @currency)
+  end
+
   private
 
     def is_valid_amount?(amount)
