@@ -14,7 +14,7 @@ describe Money do
 
   it "is not possible to create a money with an invalid amount" do
     err = -> { Money.new(0, 'EUR') }.must_raise Money::InvalidMoneyError
-    err.message.must_match /Amount must be greater than 0/
+    err.message.must_match(/Amount must be greater than 0/)
   end
 
   it "is possible to inspect an instance to get the amount and currency" do
@@ -28,14 +28,12 @@ describe Money do
 
   it "is not possible to configure a currency rate with an invalid amount of currency" do
     err = -> { Money.conversion_rates('EUR', { 'USD' => -1.11, 'Bitcoin' => -0.0047 })}.must_raise Money::InvalidMoneyError
-    err.message.must_match /Amount must be greater than 0/
+    err.message.must_match(/Amount must be greater than 0/)
   end
 
   it "is possible to convert to a different currency" do
-    expected = Money.new(55.5, 'USD')
     fifty_eur.convert_to('USD').amount.must_equal 55.50
     fifty_eur.convert_to('USD').currency.must_equal 'USD'
-
   end
 
   it "should return a Money instance when convert is called" do
@@ -46,19 +44,19 @@ describe Money do
   it "is not possible to convert an invalid amount" do
     Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
     err = -> { invalid_eur.convert_to('USD')}.must_raise Money::InvalidMoneyError
-    err.message.must_match /Amount must be greater than 0/
+    err.message.must_match(/Amount must be greater than 0/)
   end
 
   it "is not possible to convert to a currency rate that is not configured" do
     Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
     err = -> { fifty_eur.convert_to('BR')}.must_raise Money::InvalidMoneyError
-    err.message.must_match /Currency rate not available/
+    err.message.must_match(/Currency rate not available/)
   end
 
   it "is not possible to convert to a currency if the currency base is not valid" do
     Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
     err = -> { invalid_base.convert_to('USD')}.must_raise Money::InvalidMoneyError
-    err.message.must_match /Currency base not available/
+    err.message.must_match(/Currency base not available/)
   end
 
   describe "Money Arithmetics" do
