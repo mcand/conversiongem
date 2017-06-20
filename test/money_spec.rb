@@ -4,8 +4,10 @@ require 'money'
 
 describe Money do
   let(:fifty_eur) {Money.new(50, 'EUR')}
+  let(:twenty_eur) {Money.new(20, 'EUR')}
   let(:invalid_eur) {Money.new(-1, 'EUR')}
   let(:invalid_base) {Money.new(50, 'BR')}
+  let(:twenty_dollars) {Money.new(20, 'USD')}
 
   describe "Money creation" do
     it "is possible to create a money with a valid amount and a valid currency" do
@@ -74,6 +76,26 @@ describe Money do
         sum = fifty_eur + fifty_eur
         sum.must_equal(Money.new(100, 'EUR'))
       end
+
+      it "is possible to sum two instances of money" do
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+        sum = fifty_eur + twenty_eur
+        sum.must_equal(Money.new(70, 'EUR'))
+      end
+
+      it "is possible to sum two instances of money with different currencies" do
+        Money.conversion_rates('EUR', no)
+        sum = fifty_eur + twenty_dollars
+        sum.must_equal(Money.new(68.02, 'EUR'))
+      end
+    end
+  end
+
+  describe "Subtraction" do
+    it "is possibe to subtract two instances of money" do
+      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+      minus = fifty_eur - twenty_eur
+      minus.must_equal(Money.new(31.98, 'EUR'))
     end
   end
 
