@@ -30,7 +30,6 @@ class Money
   end
 
   def convert_to currency
-    # TODO: verificar se ta setado para o currency passado
     raise InvalidMoneyError, "Currency rate not available" unless @@rates.include? currency
     raise InvalidMoneyError, "Currency base not available" unless @@currency == self.currency
     new_amount = self.amount * @@rates[currency]
