@@ -84,7 +84,7 @@ describe Money do
       end
 
       it "is possible to sum two instances of money with different currencies" do
-        Money.conversion_rates('EUR', no)
+        Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
         sum = fifty_eur + twenty_dollars
         sum.must_equal(Money.new(68.02, 'EUR'))
       end
@@ -95,6 +95,12 @@ describe Money do
     it "is possibe to subtract two instances of money" do
       Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
       minus = fifty_eur - twenty_eur
+      minus.must_equal(Money.new(30.0, 'EUR'))
+    end
+
+    it "is possible to subtract two instances of money with different currencies" do
+      Money.conversion_rates('EUR', { 'USD'=> 1.11, 'Bitcoin' => 0.0047})
+      minus = fifty_eur - twenty_dollars
       minus.must_equal(Money.new(31.98, 'EUR'))
     end
   end

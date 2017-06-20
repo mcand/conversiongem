@@ -34,6 +34,15 @@ class Money
     end
   end
 
+  def -(money)
+    if @currency != money.currency
+      conversion = (money.amount / rate_for(money.currency)).round(2)
+      return Money.new(@amount - conversion, @currency)
+    else
+      return Money.new(@amount - money.amount, money.currency)
+    end
+  end
+
   def convert_to currency
     raise InvalidMoneyError, "Currency rate not available" unless @@rates.include? currency
     raise InvalidMoneyError, "Currency base not available" unless @@currency == self.currency
