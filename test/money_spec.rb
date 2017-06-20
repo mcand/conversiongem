@@ -8,6 +8,7 @@ describe Money do
   let(:invalid_eur) {Money.new(-1, 'EUR')}
   let(:invalid_base) {Money.new(50, 'BR')}
   let(:twenty_dollars) {Money.new(20, 'USD')}
+  let(:five_dollars) {Money.new(5, 'USD')}
 
   describe "Money creation" do
     it "is possible to create a money with a valid amount and a valid currency" do
@@ -149,6 +150,18 @@ describe Money do
 
       it "is not possible to compare different currencies" do
         err = -> { fifty_eur > twenty_dollars }.must_raise Money::InvalidMoneyError
+        err.message.must_match(/Cannot compare different currencies/)
+      end
+    end
+
+    describe "Smaller" do
+      it "should be possible to verify if a money is greater than another" do
+        result = five_dollars < twenty_dollars
+        result.must_equal true
+      end
+
+      it "is not possible to compare different currencies" do
+        err = -> { fifty_eur < twenty_dollars }.must_raise Money::InvalidMoneyError
         err.message.must_match(/Cannot compare different currencies/)
       end
     end
