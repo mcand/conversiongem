@@ -41,6 +41,7 @@ describe Money do
 
   describe "Money convertion" do
     it "is possible to convert to a different currency" do
+      Money.conversion_rates('EUR', { 'USD' => 1.11, 'Bitcoin' => 0.0047 })
       fifty_eur.convert_to('USD').amount.must_equal 55.50
       fifty_eur.convert_to('USD').currency.must_equal 'USD'
     end
