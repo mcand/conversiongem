@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'conversion_dawanda'
 require 'money'
 
 describe Money do
